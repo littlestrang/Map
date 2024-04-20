@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Maps Example</title>
+    <style>
+        #map {
+            height: 800px;
+        }
+        .info-window {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            min-width: 200px;
+            max-width: 300px;
+        }
+        .info-window-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .info-window-address {
+            color: #666;
+        }
+        #custom-marker {
+            width: 32px;
+            height: 32px;
+        }
+        .search-input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 300px;
+            max-width: calc(100% - 100px);
+        }
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchInput" placeholder="Search..." class="search-input" autocomplete="on">
+    <button onclick="search()" class="search-button">Search</button>
+    <div id="map"></div>
+
+    <script>
+        function search() {
+            var input = document.getElementById('searchInput').value;
+            var request = {
+                query: input,
+                fields: ['geometry']
+            };
+
+            placesService.findPlaceFromQuery(request, function(results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(10);
+                    createMarker(results[0].geometry.location);
+                } else {
+                    alert('place not found');
+                }
+            });
+        }
+
+        var map, infoWindow, placesService;
+
+        function initMap() {
+            var center = { lat: 52.22977, lng: 21.01178 };
+            map = new google.maps.Map(
+                document.getElementById('map'), { 
+                    zoom: 6, 
+                    center: center,
+                    styles: [
+                        {
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#242f3e"
+                                }
+                            ]
+                        },
+                        {
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#746855"
+                                }
+                            ]
+                        },
+                        { 
+                            "featureType": "administrative",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#000000"
+                                }
+                            ]
+                        },
+                        {
+                            "elementType": "labels.text.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#242f3e"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "administrative.locality",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#d59563"
+                                },
+                            ]
+                        },
+                        {
+                            "featureType": "poi",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#d59563"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.park",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#6b9a76"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#38414e"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#212a37"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#9ca5b3"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road.highway",
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#746855"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road.highway",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#1f2835"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road.highway",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#f3d19c"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "transit",
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#2f3948"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "transit.station",
+                            "elementType": "labels.text.fill",
+                            "stylers": [{
+                                "color": "#d59563"
+                            }]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#17263c"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#515c6d"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "labels.text.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#17263c"
+                                }
+                            ]
+                        }
+                    ]
+                });
+            
+                
+            infoWindow = new google.maps.InfoWindow();
+            placesService = new google.maps.places.PlacesService(map);
+
+            // Загрузка содержимого файла "table_sedacja.html" с помощью AJAX запроса
+            fetch('/static/table_sedacja.html')
+                .then(response => response.text())
+                .then(data => {
+                    // Извлечение данных таблицы из полученного HTML-кода
+                    var parser = new DOMParser();
+                    var htmlDoc = parser.parseFromString(data, 'text/html');
+                    var table = htmlDoc.getElementById('table_sedacja');
+
+                    var rows = table.getElementsByTagName('tr');
+
+                    for (var i = 0; i < rows.length; i++) {
+                        var cells = rows[i].getElementsByTagName('td');
+                        if (cells.length >= 5) {
+                            var name = cells[1].textContent;
+                            var city = cells[2].textContent;
+                            var postalCode = cells[3].textContent;
+                            var address = cells[4].textContent;
+                            var phone = cells[5].textContent;
+
+                            var request = {
+                                query: address,
+                                fields: ['geometry']
+                            };
+
+                            placesService.findPlaceFromQuery(request, createMarker.bind(null, name, city, postalCode, address, phone));
+                        }
+                    }
+                });
+            var input = document.getElementById('searchInput');
+            var searchBox = new google.maps.places.SearchBox(input);
+
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+                if (places.lnegth == 0) {
+                    return;
+                }
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(places) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+
+            var input = document.getElementById('searchInput');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+        }
+
+        function createMarker(name, city, postalCode, address, phone) {
+            var geocoder = new google.maps.Geocoder();
+            var fullAddress = address + ' ' + city;
+
+            geocoder.geocode({ 'address': fullAddress}, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    var location = results[0].geometry.location;
+
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: location,
+                        title: name,
+                        icon: {
+                            url: '/static/marker.png',
+                            scaledSize: new google.maps.Size(32, 32)
+                        }
+                    });
+
+                    var infoContent = '<div class="info-window">' +
+                        '<div class="info-window-title">' + name + '</div>' +
+                        '<div class="info-window-address">' +
+                        '<p>Address: ' + address + '</p>' +
+                        '<p>City: ' + city + '</p>' +
+                        '<p>Postal Code: ' + postalCode + '</p>' +
+                        '<p>Phone: ' + phone + '</p>' +
+                        '<button id="openInGoogleMapsBtn">Open in Google Maps</button>' +
+                        '</div>' +
+                        '</div>';
+
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: infoContent
+                    });
+
+                    infoWindow.addListener('domready', function() {
+                        document.getElementById('openInGoogleMapsBtn').addEventListener('click', function() {
+                            openInGoogleMaps(name + ' ' + address);
+                        });
+                    });
+
+                    marker.addListener('click', function () {
+                        var url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name + address);
+                        window.open(url, '_blank');
+                    });
+
+                    marker.addListener('mouseover', function () {
+                        infoWindow.open(map, marker);
+                    });
+
+                    marker.addListener('mouseout', function () {
+                        infoWindow.close();
+                    });
+
+                    infoWindow.addListener('mouseover', function() {
+                        infoWindow.open(map, marker);
+                    });
+
+                    infoWindow.addListener('mouseout', function() {
+                        infoWindow.close();
+                    });
+                } else {
+                    console.error('Place details request failed for the following reason: ' + status);
+                }
+            });
+        }
+
+        function openInGoogleMaps(query) {
+            var url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
+            window.open(url, 'blank');
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxg_2vwidjdZ2sikiuAhQ0yTXWQt-DZws&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>

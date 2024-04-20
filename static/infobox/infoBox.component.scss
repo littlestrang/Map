@@ -1,0 +1,80 @@
+.tool-error{  
+    background-color: rgba(0, 0, 0, 0.36);
+    position: fixed;
+    top: 73px;
+    right: 53px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.44);
+    border-radius: 7px;
+    box-shadow: 0px 0px 15px 0px #3E3D3D;
+    max-width: 50%;
+    max-height: 40%;
+    overflow-x: scroll;
+    z-index: 1000;
+    
+        .error{
+            padding: 5px 0 0 17px;
+            float: left;
+            color: #ffbcde;
+            font-size: 16px;
+            margin: 0px;          
+        }            
+        .icon-error{
+            color: red;
+            float: left;
+            font-size: 23px;
+            border: 1px solid #867d7d;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin: -3px;
+        }
+        .close{
+            padding: 0px 5px 3px 5px;
+            color: #FAFAFA;
+            opacity: 1;
+            position: fixed;
+            right: 56px;
+            top: 76px;
+            border: 1px solid white
+        } 
+}
+
+.tool-info{
+    background-color: rgba(0, 0, 0, 0.36);
+    position: fixed;
+    bottom: 114px;
+    height: 56px;
+    padding: 15px; 
+    border-radius: 7px;
+    right: 12px;
+    box-shadow: 0px 0px 15px 0px #3E3D3D;  
+
+        :after {
+            bottom: 35%;
+            right: -20px;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-left-color: rgba(0, 0, 0, 0.12);
+            border-width: 10px;     
+        }
+
+        .info{
+            padding: 5px 0 0 17px;
+            float: left;
+            color: #00fff5;
+        }     
+        .icon-info{
+            float: left;
+            color: #8fe61f;
+            font-size: 20px;
+            border: 1px solid #867d7d;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin: -3px;        
+           
+        }       
+}

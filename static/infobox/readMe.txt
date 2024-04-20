@@ -1,0 +1,1 @@
+This module is used to display information. Developed for Angular 2 and SCSS.
